@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<div class="container" style="top:50%;left:50%;padding:100px">
+
+    <h1>You are not logged in!</h1>
+    <p><a href="{%  url 'login' %}" class="btn btn-default">Login</a>
+
+    <a href="{% url 'signup' %}" class="btn btn-primary">Sign Up</a></p>
+    </div>
+
+{% endblock %}

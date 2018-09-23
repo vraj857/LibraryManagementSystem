@@ -1,0 +1,52 @@
+{% extends 'base.html'%}
+{% load staticfiles %}
+{% block title %}
+User Detail
+{% endblock %}
+
+{% block link %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/toggled_switch.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/user_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 10rem;">
+    <h2>Hello {{user.username}}</h2>
+
+
+    <table>
+
+        <tr>
+            <th>No.</th>
+            <th>User</th>
+            <th>Email</th>
+            <th>User Role</th>
+            <th>Log attempts</th>
+            <th>Status</th>
+            <th>locked date</th>
+            <th>Unlock/lock</th>
+            <th>Update</th>
+
+        </tr>
+        {% for users in user_list %}
+        <tr>
+            <td>{{users.id}}</td>
+            <td>{{users.username}}</td>
+            <td>{{users.email}}</td>
+            <td>{{users.user_role}}</td>
+            <td>{{users.login_attempts}}</td>
+            <td>{{users.is_active}}</td>
+            <td>{{users.account_locked_dt}}</td>
+
+            <td><label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label></td>
+            <td><a href="{% url 'user_list_update' pk=users.id %} ">Update</a></td>
+
+        </tr>
+            {% endfor %}
+    </table>
+
+</div>
+{% endblock %}
