@@ -30,18 +30,35 @@ class LoginForm(AuthenticationForm):
                 user = None
 
             if user is not None:
-                if user.is_active:
+                #check if the user account is locked or not
+                if user.account_locked_dt is not None:
+                    
+                    #if locked date is not None, calculate the time difference
+                    timedelta = datetime.now().replace(tzinfo=None) - user.account_locked_dt.replace(tzinfo=None)
+                    
+                    #if the time difference is greater than 5 minutes
+                    #unlock the user
+                    if timedelta.seconds > 300:
+                        user.login_attempts = 0
+                        user.is_active = True
+                        user.account_locked_dt = None
+                        user.save()
 
+                #check if user is active
+                if user.is_active:
+                    #if active, check if credential is correct or not by calling authenticate function
                     self.user_cache = authenticate(username=username,
                                                    password=password)
 
+                    #if credentials are invalid,update the login attempts and raise validation error
                     if self.user_cache is None:
                         user.login_attempts += 1;
                         if user.login_attempts < 3:
-                            error_message = 'Invalid Username/Password. '
+                            error_message = 'Invalid Username/Password.'
                             user.save()
                             raise forms.ValidationError(error_message)
 
+                        #if login attempt exceeds 2, lock the account and raise validation error
                         else:
                             user.is_active = False
                             user.account_locked_dt = datetime.now()
@@ -49,24 +66,23 @@ class LoginForm(AuthenticationForm):
                             error_message = 'You exceeded maximum login attempts. Your account has been temporarily Inactive. Please contact Admin to reactivate.' + str(
                                 user.account_locked_dt)
                             raise forms.ValidationError(error_message)
-
+                    
+                    #if user provides correct credentials before he exceeds the login attempts
+                    #then let the user login and reset the login attempts if any
                     else:
                         if user.login_attempts > 0:
                             user.login_attempts = 0
                             user.save()
                         self.confirm_login_allowed(self.user_cache)
 
+                #if user is inactive (i.e. account is locked)
+                #then raise a validation error
                 else:
-                    timedelta = datetime.now().replace(tzinfo=None) - user.account_locked_dt.replace(tzinfo=None)
-                    if timedelta.seconds > 300:
-                        user.login_attempts = 1
-                        user.is_active = True
-                        user.account_locked_dt = None
-                        user.save()
-                    else:
-                        error_message = 'Your account is currently Inactive. Please contact Admin to reactivate.'
-                        raise forms.ValidationError(error_message)
+                    error_message = 'Your account is currently Inactive. Please contact Admin to reactivate.'
+                    raise forms.ValidationError(error_message)
 
+            #if user doesn't exist in the database
+            #then taise a validation error
             else:
                 error_message = 'Invalid Username/Password.'
                 raise forms.ValidationError(error_message)
