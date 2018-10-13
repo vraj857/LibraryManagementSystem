@@ -1,7 +1,12 @@
 {% extends 'base.html'%}
+{% load staticfiles %}
 
 {% block title %}
 User Detail Update
+{% endblock %}
+
+{% block link %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/toggled_switch.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -9,7 +14,10 @@ User Detail Update
 <div class="container">
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
+        <table>
+            {{form.as_table}}
+        </table>
+
         <button type="submit" class="btn btn-success">save</button>
     </form>
 </div>

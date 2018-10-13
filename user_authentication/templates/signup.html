@@ -10,7 +10,10 @@ Sign up
     <h2>Sign Up</h2>
     <form method="POST">
         {%csrf_token%}
-        {{form.as_p}}
+        <table>
+            {{form.as_table}}
+        </table>
+
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
