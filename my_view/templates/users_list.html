@@ -19,6 +19,7 @@ User Detail
         <tr>
             <th>No.</th>
             <th>User</th>
+            <th>Name</th>
             <th>Email</th>
             <th>User Role</th>
             <th>Log attempts</th>
@@ -28,25 +29,96 @@ User Detail
             <th>Update</th>
 
         </tr>
-        {% for users in user_list %}
+        {% for user in user_list %}
         <tr>
-            <td>{{users.id}}</td>
-            <td>{{users.username}}</td>
-            <td>{{users.email}}</td>
-            <td>{{users.user_role}}</td>
-            <td>{{users.login_attempts}}</td>
-            <td>{{users.is_active}}</td>
-            <td>{{users.account_locked_dt}}</td>
+            <td>{{user.id}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.first_name}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.user_role}}</td>
+            <td>{{user.login_attempts}}</td>
+            <td>{{user.is_active}}</td>
+            <td>{{user.account_locked_dt}}</td>
+            <!--<td>-->
+            <!--<button id='btn' class="btn btn-danger" onclick="myFunction()">lock</button>-->
+            <!--</td>-->
+            <!--<td>-->
+            <!--<div class="col-sm-5">-->
+            <!--<button type="button" class="btn btn-lg btn-toggle" data-toggle="button" aria-pressed="false"-->
+            <!--autocomplete="off">-->
+            <!--<div class="handle"></div>-->
+            <!--</button>-->
+            <!--</div>-->
 
+            </td>
             <td><label class="switch">
-                <input type="checkbox">
+                <input id='myCheck{{user.id}}' type="checkbox" onclick="check({{user.id}})">
                 <span class="slider round"></span>
             </label></td>
-            <td><a href="{% url 'user_list_update' pk=users.id %} ">Update</a></td>
+            <!--<td>-->
+            <!--<div class="onoffswitch">-->
+            <!--<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>-->
+            <!--<label class="onoffswitch-label" for="myonoffswitch">-->
+            <!--<span class="onoffswitch-inner"></span>-->
+            <!--<span class="onoffswitch-switch"></span>-->
+            <!--</label>-->
+            <!--</div>-->
+            <!--</td>-->
+            <td><a href="{% url 'user_update' pk=user.id %}">Update</a></td>
 
         </tr>
-            {% endfor %}
+        {% endfor %}
     </table>
 
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    <!--function myFunction(){-->
+    <!--var txt ;-->
+    <!--if(document.getElementById('btn').innerHTML=='lock'){-->
+    <!--if(confirm("Are you sure you want to lock this user?")){-->
+    <!--txt='unlock';-->
+    <!--$('#btn').addClass('btn btn-primary');-->
+    <!--}document.getElementById("btn").innerHTML = txt;-->
+    <!--}else{-->
+    <!--if(confirm("Are you sure you want to unlock this user?")){-->
+    <!--txt='lock';-->
+    <!--$('#btn').addClass('btn btn-primary');-->
+    <!--}document.getElementById("btn").innerHTML = txt;-->
+    <!--}-->
+    <!--}-->
+
+function check(user_id)
+{
+if(document.getElementById("myCheck"+user_id).checked){
+    console.log("check box status ="+document.getElementById("myCheck"+user_id).checked);
+    var result = confirm("Are you sure you want to unlock this user?");
+    console.log("result = "+result);
+    if(result){
+        //document.getElementById("myCheck"+user_id).checked=true;
+    }else{
+        document.getElementById("myCheck"+user_id).checked=false;
+    }
+}else{
+    console.log("check box status ="+document.getElementById("myCheck"+user_id).checked);
+    var result = confirm("Are you sure you want to lock this user?");
+    console.log("result = "+result);
+    if(result){
+        //document.getElementById("myCheck"+user_id).checked=false;
+    }else{
+        document.getElementById("myCheck"+user_id).checked=true;
+    }
+}
+
+}
+
+
+
+
+
+
+
+
+
+</script>
 {% endblock %}
