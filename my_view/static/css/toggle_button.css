@@ -128,7 +128,7 @@
 .btn-toggle.btn-lg.active:after {
   opacity: 1;
 }
-.m;btn-toggle.btn-lg.btn-sm:before,
+.btn-toggle.btn-lg.btn-sm:before,
 .btn-toggle.btn-lg.btn-sm:after {
   line-height: 0.5rem;
   color: #fff;
